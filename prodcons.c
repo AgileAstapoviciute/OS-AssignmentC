@@ -2,8 +2,9 @@
  * Operating Systems  (2INC0)  Practical Assignment.
  * Condition Variables Application.
  *
- * STUDENT_NAME_1 (STUDENT_NR_1)
- * STUDENT_NAME_2 (STUDENT_NR_2)
+ * Cunyuan Liu 2330512
+ * Christina Tsakloglou 2413094
+ * Agile Astapoviciute 1962965
  *
  * Grading:
  * Students who hand in clean code that fully satisfies the minimum requirements will get an 8.
