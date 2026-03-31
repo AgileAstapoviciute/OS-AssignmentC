@@ -38,7 +38,7 @@ static ITEM get_next_item(void); // already implemented (see below)
 static int item_to_producer[NROF_ITEMS];
 
 static int signal_count = 0;
-static int broadcast_count = 0;
+// static int broadcast_count = 0;
 
 /* producer thread */
 static void *
@@ -173,8 +173,8 @@ int main(void)
 		pthread_join(producer_threads[i], NULL);
 	}
 
-	fprintf(stderr, "Total signals: %d\n", signal_count);
-    fprintf(stderr, "Total broadcasts: %d\n", broadcast_count);
+	// fprintf(stderr, "Total signals: %d\n", signal_count);
+    // fprintf(stderr, "Total broadcasts: %d\n", broadcast_count);
 
 	return (0);
 }
