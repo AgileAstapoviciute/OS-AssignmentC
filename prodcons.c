@@ -39,7 +39,7 @@ static ITEM get_next_item(void); // already implemented (see below)
 static int item_to_producer[NROF_ITEMS];
 
 static int signal_count = 0;
-// static int broadcast_count = 0;
+static int broadcast_count = 0;
 
 /* producer thread */
 static void *
@@ -80,15 +80,16 @@ producer(void *arg)
 
 		// Signal only the producer holding the next expected item
 		if (expected_item < NROF_ITEMS)
-        {
-            int next_p = item_to_producer[expected_item];
-			//a safety guard against a race condition. It ensures you don't try 
-			//to send a signal to a "ghost" producer that hasn't picked up an item yet.
-            if (next_p != -1) {
-                pthread_cond_signal(&cv_load[next_p]);
+		{
+			int next_p = item_to_producer[expected_item];
+			// a safety guard against a race condition. It ensures you don't try
+			// to send a signal to a "ghost" producer that hasn't picked up an item yet.
+			if (next_p != -1)
+			{
+				pthread_cond_signal(&cv_load[next_p]);
 				signal_count++;
-            }
-        }
+			}
+		}
 
 		//      mutex-unlock;
 		pthread_mutex_unlock(&mutex);
@@ -130,15 +131,16 @@ consumer(void *arg)
 
 		// signal only the producer holding the next expected item
 		if (expected_item < NROF_ITEMS)
-        {
-            int next_p = item_to_producer[expected_item];
-			//a safety guard against a race condition. It ensures you don't try 
-			//to send a signal to a "ghost" producer that hasn't picked up an item yet.
-            if (next_p != -1) {
-                pthread_cond_signal(&cv_load[next_p]);
+		{
+			int next_p = item_to_producer[expected_item];
+			// a safety guard against a race condition. It ensures you don't try
+			// to send a signal to a "ghost" producer that hasn't picked up an item yet.
+			if (next_p != -1)
+			{
+				pthread_cond_signal(&cv_load[next_p]);
 				signal_count++;
-            }
-        }
+			}
+		}
 
 		//      mutex-unlock;
 		pthread_mutex_unlock(&mutex);
@@ -151,12 +153,14 @@ consumer(void *arg)
 int main(void)
 {
 	pthread_t producer_threads[NROF_PRODUCERS];
-    pthread_t consumer_thread;
-    int producer_ids[NROF_PRODUCERS];
+	pthread_t consumer_thread;
+	int producer_ids[NROF_PRODUCERS];
 
-    // Initialize mapping and condition variables
-    for (int i = 0; i < NROF_ITEMS; i++) item_to_producer[i] = -1;
-    for (int i = 0; i < NROF_PRODUCERS; i++) pthread_cond_init(&cv_load[i], NULL);
+	// Initialize mapping and condition variables
+	for (int i = 0; i < NROF_ITEMS; i++)
+		item_to_producer[i] = -1;
+	for (int i = 0; i < NROF_PRODUCERS; i++)
+		pthread_cond_init(&cv_load[i], NULL);
 
 	// * startup the producer threads and the consumer thread
 	for (int i = 0; i < NROF_PRODUCERS; i++)
@@ -174,8 +178,8 @@ int main(void)
 		pthread_join(producer_threads[i], NULL);
 	}
 
-	// fprintf(stderr, "Total signals: %d\n", signal_count);
-    // fprintf(stderr, "Total broadcasts: %d\n", broadcast_count);
+	fprintf(stderr, "Total signals: %d\n", signal_count);
+	fprintf(stderr, "Total broadcasts: %d\n", broadcast_count);
 
 	return (0);
 }
